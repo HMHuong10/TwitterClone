@@ -3,6 +3,27 @@
 	$user_id = $_SESSION['user_id'];
 	$getFromU = new User($pdo);
 	$user = $getFromU->userData($user_id);
+	//TEST INSERT $getFromU->create('users', array('username'=>'thoanh', 'email'=>'tranhaanh2411@gmail.com', 'password'=>md5('password'), 'screenName' => 'imhere'));
+
+	//
+
+	if(isset($_POST['tweet'])){
+		$status = $getFromU->checkInput($_POST['status']);
+		$tweetImage = '';
+
+		if(!empty($status) or !empty($_FILES['file']['name'][0])){
+			if(!empty($_FILES['file']['name'][0])){
+				$tweetImage = $getFromU->uploadImage($_FILES['files']);
+			}
+
+			if(strlen($status)>140){
+				$error = "The text of your tweet is too long!";
+			}
+			$getFromU->create('tweets', array('status' => $status, 'tweetBy' => $user_id, 'tweetImage' =>$tweetImage, 'postedOn'=>date('Y-m-d H:i:s')));
+		}else{
+			$error = "Type or choose image to tweet";
+		}
+	}
 ?>
 <html>
 	<head>
@@ -148,7 +169,7 @@
 						 		<ul>
 						 			<input type="file" name="file" id="file"/>
 						 			<li><label for="file"><i class="fa fa-camera" aria-hidden="true"></i></label>
-						 			<span class="tweet-error"></span>
+						 			<span class="tweet-error"><?php if(isset($error)){echo $error;}else if (isset($imageError)){echo $imageError;} ?></span>
 						 			</li>
 						 		</ul>
 						 	</div>
@@ -164,7 +185,8 @@
 			
 				<!--Tweet SHOW WRAPPER-->
 				 <div class="tweets">
- 				  	<!--TWEETS HERE-->
+ 				  	<?php $getFromT = new Tweet($pdo);
+ 				  	$getFromT->tweets();?>
  				 </div>
  				<!--TWEETS SHOW WRAPPER-->
 
