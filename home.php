@@ -174,7 +174,7 @@
 						 		</ul>
 						 	</div>
 						 	<div class="t-fo-right">
-						 		<span id="count">140</span>
+						 		<span id="count">280</span>
 						 		<input type="submit" name="tweet" value="tweet"/>
 				 		</form>
 						 	</div>

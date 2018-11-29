@@ -30,6 +30,7 @@ class User{
 			return false;
 		}
 	}
+
 	public function userData($user_id){
 		$stmt = $this->pdo->prepare("SELECT * FROM `users` WHERE `user_id` = :user_id") ;
 		$stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
@@ -37,6 +38,7 @@ class User{
 		return $stmt->fetch(PDO::FETCH_OBJ);
 
 	}
+
 	public function logout(){
 		$_SESSION = array();
 		session_destroy();
@@ -57,5 +59,12 @@ class User{
 		}
 	}
 
+	public function userIdByUsername($username){
+		$stmt= $this->pdo->prepare("SELECT `user_id` FROM `users` WHERE `username`= :username");
+		$stmt->bindParam(":user_name", $username, PDO::PARAM_STR);
+		$stmt->execute();
+		$user = $stmt->fetch(PDO::FETCH_OBJ);
+		return $user->user_id;
+	}
 }
 ?>
